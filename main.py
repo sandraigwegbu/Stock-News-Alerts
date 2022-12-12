@@ -12,7 +12,14 @@ STOCKS = {
 	"GDOT": "Green Dot Corporation",
 	"AFRM": "Affirm Holdings Inc",
 }
-ALERT_PERCENTAGE = 5  # day-to-day percentage increase/decrease in stock price to trigger email alert
+ALERT_PERCENTAGE = 1  # day-to-day percentage increase/decrease in stock price to trigger email alert
+
+# SMTP and Email details
+SMTP_SERVER = "smtp.gmail.com"
+MY_EMAIL = os.environ.get("MY_EMAIL")
+MY_PASSWORD = os.environ.get("EMAIL_PASSWORD")
+LIST_OF_RECIPIENTS = [os.environ.get("RECIPIENT_1"),
+					os.environ.get("RECIPIENT_2")]  # modify list of recipients as required
 
 # --------------------------------------------- STOCK/NEWS ALERT ENGINE ---------------------------------------------- #
 for key in STOCKS:
@@ -35,13 +42,6 @@ for key in STOCKS:
 		"apiKey": NEWS_API_KEY,
 	}
 
-	# SMTP and Email details
-	SMTP_SERVER = "smtp.gmail.com"
-	MY_EMAIL = os.environ.get("MY_EMAIL")
-	MY_PASSWORD = os.environ.get("EMAIL_PASSWORD")
-	LIST_OF_RECIPIENTS = [os.environ.get("RECIPIENT_1"),
-						os.environ.get("RECIPIENT_2")]  # modify list of recipients as required
-
 	# Get the daily stock price data for the given STOCK
 	stock_request = requests.get(ALPHAVANTAGE_ENDPOINT, params=STOCK_PARAMETERS)
 	stock_request.raise_for_status()
@@ -63,7 +63,7 @@ for key in STOCKS:
 		percentage_change = round(((latest_price / previous_price) - 1) * 100, 1)
 		get_news = True
 	elif latest_price < previous_price * (1 - ALERT_PERCENTAGE/100):  # greater than (ALERT_PERCENTAGE)% price decrease
-		change_direction = "DOWN"
+		change_direction = "DOWN"  # Unicode: U+25BC
 		percentage_change = round(((latest_price / previous_price) - 1) * -100, 1)
 		get_news = True
 
