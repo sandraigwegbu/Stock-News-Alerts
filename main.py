@@ -103,6 +103,8 @@ for key in STOCKS:
 				email_message = ""
 				if len(news_articles) == 0:
 					email_message += "No news articles have been found."
+				elif news_articles[0] == "Error retrieving news articles.":
+					email_message += news_articles[0]
 				else:
 					for num in range(0, len(news_articles)):
 						email_message += f"Published: {news_articles[num][2]}\n" \
